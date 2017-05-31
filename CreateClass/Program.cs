@@ -32,12 +32,12 @@ namespace CreateClass
 
         public override string ToString()
         {
-            return String.Format("Name: {0}, Birth date: {2}", this.name, this.birthDate);
+            return String.Format("Name: {0}, Birth date: {1}", this.name, this.birthDate);
         }
     }
 
 
-    class Employee : Person
+    class Employee : Person, ICloneable
     {
         public Room room;
         private int salary;
@@ -70,6 +70,22 @@ namespace CreateClass
         {
             return base.ToString() + String.Format(", Salary: {0}, Profession: {1}, Room: {2}", salary, profession, room.Number);
         }
+
+
+        /*
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
+        */
+
+        public object Clone()
+        {
+            Employee newEmployee = (Employee)this.MemberwiseClone();
+            newEmployee.room = new Room(room.Number);
+            return newEmployee;
+        }
+
     }
 
 
@@ -85,6 +101,23 @@ namespace CreateClass
         public Room(int number)
         {
             this.number = number;
+        }
+    }
+
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Employee Kovacs = new Employee("Géza", DateTime.Now, 1000, "léhűtő");
+            Kovacs.room = new Room(111);
+
+            Employee Kovacs2 = (Employee)Kovacs.Clone();
+            Kovacs2.room.Number = 112;
+
+            Console.WriteLine(Kovacs.ToString());
+            Console.WriteLine(Kovacs2.ToString());
+            Console.ReadKey();
         }
     }
 
